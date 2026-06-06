@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>قرار بهاری | Kimia در میان شکوفه‌ها</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Cormorant Garamond', 'Segoe UI', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.6s ease-in-out;
+        }
+
+        /* صفحه دعوت - شکوفه‌های گیلاس ژاپن */
+        body.invite-page {
+            background-image: url('https://images.pexels.com/photos/258117/pexels-photo-258117.jpeg?auto=compress&cs=tinysrgb&w=1600');
+            background-size: cover;
+            background-position: center 30%;
+        }
+        
+        /* صفحه جزئیات - منظره بهاری چمنزار و شکوفه */
+        body.details-page {
+            background-image: url('https://images.pexels.com/photos/1252869/pexels-photo-1252869.jpeg?auto=compress&cs=tinysrgb&w=1600');
+            background-size: cover;
+            background-position: center 40%;
+        }
+        
+        /* لایه شفاف برای خوانایی متن */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* کارت اصلی با شیشه‌ای مات و طراحی طبیعی */
+        .card {
+            background: rgba(25, 20, 16, 0.65);
+            backdrop-filter: blur(16px);
+            border-radius: 56px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,215,150,0.25) inset;
+            max-width: 680px;
+            width: 100%;
+            z-index: 10;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 200, 130, 0.4);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* هدر با الهام از طبیعت */
+        .nature-header {
+            background: linear-gradient(135deg, #2f261e80, #1e181280);
+            padding: 28px 20px 18px;
+            text-align: center;
+            border-bottom: 1px solid #e4b87a;
+        }
+        .nature-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.3rem;
+            letter-spacing: 2px;
+            color: #fff5e8;
+            text-shadow: 2px 2px 8px #2a1a0a;
+            font-weight: 600;
+        }
+        .nature-header .sub {
+            font-size: 0.95rem;
+            color: #ffefcf;
+            font-style: italic;
+            margin-top: 6px;
+        }
+
+        /* صفحات مجزا */
+        .page {
+            padding: 35px 30px 45px;
+            transition: opacity 0.4s ease;
+        }
+        .page.hidden {
+            display: none;
+        }
+
+        /* سوال اصلی */
+        .question-nature {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            text-align: center;
+            color: #fff8ed;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 70px;
+            margin: 10px 0 35px;
+            border-left: 2px solid #f3ca8a;
+            border-right: 2px solid #f3ca8a;
+            letter-spacing: 1px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* دکمه‌ها - بدون کادر و کاملاً آزاد */
+        .buttons-free {
+            display: flex;
+            justify-content: center;
+            gap: 45px;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 160px;
+        }
+        .btn-nature {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: bold;
+            padding: 12px 38px;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #f7e5cf;
+            color: #4a2a1a;
+            box-shadow: 0 6px 0 #aa7a4a;
+            border: 1px solid #ffdfb8;
+            letter-spacing: 1px;
+            z-index: 20;
+        }
+        .btn-yes-nature {
+            background: #d9ae6c;
+            color: #2d1f0f;
+            box-shadow: 0 6px 0 #7a4a28;
+        }
+        .btn-no-nature {
+            background: #c9a16e;
+            color: #2c1c0c;
+            box-shadow: 0 6px 0 #795a38;
+        }
+        .btn-nature:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #7a4a28;
+        }
+
+        /* دکمه نه آزادانه در کل صفحه فرار می‌کند */
+        .no-fixed-escape {
+            position: fixed !important;
+            z-index: 9999;
+            transition: left 0.1s linear, top 0.1s linear;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* پنل جزئیات - طراحی طبیعت‌گرا */
+        .detail-panel {
+            background: rgba(30, 24, 18, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 10px 0;
+        }
+        .form-group {
+            margin-bottom: 24px;
+            text-align: right;
+            border-bottom: 1px solid #edc28b40;
+            padding-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #fff5ea;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+        }
+        select, input, .radio-group label {
+            background: #2e251ed9;
+            border: 1px solid #e7b874;
+            color: #fff4e4;
+            border-radius: 50px;
+            padding: 10px 18px;
+            font-family: 'Cormorant Garamond', monospace;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+        }
+        .date-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .date-row select { flex: 1; }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .radio-group label {
+            background: #3f3225b3;
+            padding: 6px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .submit-nature {
+            background: #c28a54;
+            color: #1f150d;
+            font-weight: bold;
+            font-size: 1.4rem;
+            padding: 12px;
+            border: none;
+            border-radius: 60px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Playfair Display', serif;
+        }
+        .submit-nature:hover { background: #dc9f64; transform: scale(1.01); }
+        
+        .success-message {
+            background: #5f7b4cd9;
+            color: #fff5e6;
+            padding: 15px;
+            border-radius: 40px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            display: none;
+            border-right: 4px solid #ffdd99;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #f3daaf;
+            padding: 15px 0 5px;
+            border-top: 1px solid #dbb07260;
+            font-style: italic;
+        }
+
+        @media (max-width: 580px) {
+            .page { padding: 25px 20px; }
+            .question-nature { font-size: 1.4rem; }
+            .btn-nature { font-size: 1.4rem; padding: 8px 25px; }
+            .nature-header h1 { font-size: 1.7rem; }
+        }
+
+        /* انیمیشن سقوط شکوفه */
+        .sakura-falling {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            font-size: 1.4rem;
+            opacity: 0.7;
+            animation: fallLinear linear forwards;
+        }
+        @keyframes fallLinear {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.9; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .fade-in {
+            animation: gentleFade 0.5s ease;
+        }
+        @keyframes gentleFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="invite-page">
+
+<div class="card" id="mainCard">
+    <div class="nature-header">
+        <h1>🌸 بهار در انتظار توست 🌸</h1>
+        <div class="sub">زیر باران شکوفه‌های گیلاس، کنار هم بهاری ماندگار می‌سازیم</div>
+    </div>
+    
+    <!-- صفحه دعوت (اول) -->
+    <div id="pageInvite" class="page">
+        <div class="question-nature">
+            “ زیر درختان ساکورا، کنار نسیم بهاری... ” <br>
+            می‌آیی تا با هم خاطره‌ای بی‌نظیر بسازیم؟
+        </div>
+        <div class="buttons-free" id="initialButtons">
+            <button class="btn-nature btn-yes-nature" id="yesBtn">🌸 بله، با تمام وجود</button>
+            <button class="btn-nature btn-no-nature" id="noBtn">🍃 نه</button>
+        </div>
+        <footer>✨ در هوایی پر از عطر بهار و شکوفه‌های گیلاس ✨</footer>
+    </div>
+    
+    <!-- صفحه جزئیات قرار (مرحله دوم) -->
+    <div id="pageDetails" class="page hidden">
+        <div class="detail-panel">
+            <div class="form-group">
+                <label>📅 روز بهاریِ تابستان ۱۴۰۵ (تیر، مرداد، شهریور)</label>
+                <div class="date-row">
+                    <select id="yearSelect"></select>
+                    <select id="monthSelect"></select>
+                    <select id="daySelect"></select>
+                </div>
+                <div style="font-size:0.7rem; color:#ffdfb3; margin-top:5px;">فقط ماه‌های گرم و پر از شکوفه</div>
+            </div>
+            <div class="form-group">
+                <label>⏰ ساعت طلایی قرار (زیر نور غروب)</label>
+                <input type="time" id="timeInput" value="19:00" style="background:#2e251ed9;">
+            </div>
+            <div class="form-group">
+                <label>🍱 خوراکی همراه با نسیم بهاری</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="meal" value="صبحانهٔ ساکورا"> صبحانهٔ ساکورا</label>
+                    <label><input type="radio" name="meal" value="ناهار باغچه"> ناهار باغچه</label>
+                    <label><input type="radio" name="meal" value="شام مهتاب" checked> شام مهتاب</label>
+                    <label><input type="radio" name="meal" value="عصرانهٔ شکوفه"> عصرانهٔ شکوفه</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>🌸 از میان عطر گل‌های ایران، کدام را برایت بیاورم؟</label>
+                <select id="flowerSelect">
+                    <option value="رز سرخ اصفهان">🌹 رز سرخ اصفهان</option>
+                    <option value="لالهٔ واژگون لرستان">🌷 لالهٔ واژگون لرستان</option>
+                    <option value="میخک شیراز">🌸 میخک شیراز</option>
+                    <option value="نرگس زاگرس">🌼 نرگس زاگرس</option>
+                    <option value="یاس کاشان">🤍 یاس کاشان</option>
+                    <option value="مریم خوزستان">🌿 مریم خوزستان</option>
+                    <option value="گل محمدی قمصر">🌹 گل محمدی قمصر</option>
+                    <option value="سنبل همدان">💜 سنبل همدان</option>
+                    <option value="زنبق کرمانشاه">💙 زنبق کرمانشاه</option>
+                    <option value="آفتابگردان تبریز">🌻 آفتابگردان تبریز</option>
+                </select>
+                <div style="font-size:0.7rem; color:#fad99b; margin-top:4px;">✨ گزیده‌ای از باغ‌های کهن ایران ✨</div>
+            </div>
+            <button id="submitPlanBtn" class="submit-nature">🎋 ثبت این لحظه بهاری 🎋</button>
+            <div id="finalSuccess" class="success-message"></div>
+            <footer style="border-top: none; margin-top: 15px;">🍃 در میان شکوفه‌های گیلاس و عطر بهار</footer>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // ---------- تغییر پس‌زمینه بر اساس صفحه (منظره بهاری مجزا) ----------
+        const bodyEl = document.body;
+        const pageInvite = document.getElementById('pageInvite');
+        const pageDetails = document.getElementById('pageDetails');
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        
+        function setDetailsBackground() {
+            bodyEl.classList.remove('invite-page');
+            bodyEl.classList.add('details-page');
+        }
+        
+        function setInviteBackground() {
+            bodyEl.classList.remove('details-page');
+            bodyEl.classList.add('invite-page');
+        }
+        
+        // ---------- دکمه «نه» آزادانه در کل صفحه فرار می‌کند (هیچ محدودیتی) ----------
+        function escapeNoButtonGlobally() {
+            if (!noBtn) return;
+            if (!noBtn.classList.contains('no-fixed-escape')) {
+                noBtn.classList.add('no-fixed-escape');
+                const rect = noBtn.getBoundingClientRect();
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.style.width = rect.width + 'px';
+                noBtn.style.height = rect.height + 'px';
+                noBtn.style.margin = '0';
+            }
+            const btnW = noBtn.offsetWidth;
+            const btnH = noBtn.offsetHeight;
+            const maxX = window.innerWidth - btnW - 15;
+            const maxY = window.innerHeight - btnH - 15;
+            const minX = 15;
+            const minY = 15;
+            let newX = Math.random() * (maxX - minX) + minX;
+            let newY = Math.random() * (maxY - minY) + minY;
+            
+            // جلوگیری از همپوشانی با دکمه بله (در صورتی که در صفحه قابل مشاهده باشد)
+            const yesBtnEl = document.getElementById('yesBtn');
+            if (yesBtnEl && pageInvite && !pageInvite.classList.contains('hidden')) {
+                const yesRect = yesBtnEl.getBoundingClientRect();
+                let attempts = 0;
+                let overlapping = true;
+                while (overlapping && attempts < 35) {
+                    const testRect = { left: newX, right: newX + btnW, top: newY, bottom: newY + btnH };
+                    if (!(testRect.right < yesRect.left || testRect.left > yesRect.right || testRect.bottom < yesRect.top || testRect.top > yesRect.bottom)) {
+                        newX = Math.random() * (maxX - minX) + minX;
+                        newY = Math.random() * (maxY - minY) + minY;
+                    } else {
+                        overlapping = false;
+                    }
+                    attempts++;
+                }
+            }
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+            noBtn.style.transition = 'left 0.09s linear, top 0.09s linear';
+        }
+        
+        function activateNoEscape() {
+            if (!noBtn) return;
+            if (!noBtn.classList.contains('no-fixed-escape')) {
+                const rect = noBtn.getBoundingClientRect();
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.style.width = rect.width + 'px';
+                noBtn.style.height = rect.height + 'px';
+                noBtn.classList.add('no-fixed-escape');
+                noBtn.style.margin = '0';
+            }
+            const escapeHandler = (e) => {
+                e.preventDefault();
+                escapeNoButtonGlobally();
+                return false;
+            };
+            noBtn.addEventListener('mouseenter', escapeHandler);
+            noBtn.addEventListener('touchstart', escapeHandler);
+            noBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                escapeNoButtonGlobally();
+                noBtn.style.transform = 'scale(0.96)';
+                setTimeout(() => { if(noBtn) noBtn.style.transform = ''; }, 120);
+            });
+            window.addEventListener('resize', () => {
+                if(noBtn && noBtn.classList.contains('no-fixed-escape')) {
+                    escapeNoButtonGlobally();
+                }
+            });
+        }
+        
+        // ---------- رفتن به صفحه جزئیات + تغییر پس‌زمینه به منظره بهاری دیگر ----------
+        function switchToDetails() {
+            pageInvite.classList.add('hidden');
+            pageDetails.classList.remove('hidden');
+            pageDetails.classList.add('fade-in');
+            setDetailsBackground();
+            populateSummerDates();
+            if(noBtn) noBtn.style.display = 'none';
+            startFallingSakura(35);
+            vintageConfettiEffect(40);
+        }
+        
+        yesBtn.addEventListener('click', () => {
+            switchToDetails();
+        });
+        
+        if (noBtn) {
+            activateNoEscape();
+        }
+        
+        // ---------- توابع تاریخ (فقط تابستان ۱۴۰۵) ----------
+        function populateSummerDates() {
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            const daySelect = document.getElementById('daySelect');
+            if(!yearSelect) return;
+            yearSelect.innerHTML = '';
+            let year = 1405;
+            let optY = document.createElement('option');
+            optY.value = year;
+            optY.textContent = year;
+            optY.selected = true;
+            yearSelect.appendChild(optY);
+            
+            const summerMonths = [
+                { value: 4, name: 'تیر' },
+                { value: 5, name: 'مرداد' },
+                { value: 6, name: 'شهریور' }
+            ];
+            monthSelect.innerHTML = '';
+            summerMonths.forEach(m => {
+                let opt = document.createElement('option');
+                opt.value = m.value;
+                opt.textContent = `${m.value} - ${m.name}`;
+                if(m.value === 4) opt.selected = true;
+                monthSelect.appendChild(opt);
+            });
+            function updateDays() {
+                let month = parseInt(monthSelect.value);
+                let daysInMonth = (month <= 6) ? 31 : 30;
+                daySelect.innerHTML = '';
+                for(let i=1;i<=daysInMonth;i++) {
+                    let opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = i;
+                    if(i === 18) opt.selected = true;
+                    daySelect.appendChild(opt);
+                }
+            }
+            monthSelect.addEventListener('change', updateDays);
+            updateDays();
+        }
+        
+        function getMonthName(m) {
+            const names = ['', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+            return names[m];
+        }
+        
+        // ---------- ثبت نهایی و ذخیره داده ----------
+        const submitBtn = document.getElementById('submitPlanBtn');
+        const finalDiv = document.getElementById('finalSuccess');
+        
+        submitBtn.addEventListener('click', () => {
+            const year = document.getElementById('yearSelect').value;
+            const month = parseInt(document.getElementById('monthSelect').value);
+            const monthName = getMonthName(month);
+            const day = document.getElementById('daySelect').value;
+            const time = document.getElementById('timeInput').value;
+            const mealRad = document.querySelector('input[name="meal"]:checked');
+            const meal = mealRad ? mealRad.value : 'شام مهتاب';
+            const flowerSelect = document.getElementById('flowerSelect');
+            const flower = flowerSelect.options[flowerSelect.selectedIndex].text;
+            const fullDate = `${year}/${month}/${day} (${monthName})`;
+            const successText = `🌸 «در میان دریایی از شکوفه‌های گیلاس...» 🌸<br> قرار ما در تاریخ ${fullDate} ساعت ${time}، همراه با ${meal} و گل ${flower} ثبت شد. <br> منتظر تو هستم تا خاطره‌ای ماندگار زیر باران شکوفه‌ها بسازیم.`;
+            finalDiv.innerHTML = successText;
+            finalDiv.style.display = 'block';
+            finalDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            const dataToStore = { date: fullDate, time: time, meal: meal, flower: flower, timestamp: new Date().toISOString() };
+            localStorage.setItem('Kimia_SpringDate', JSON.stringify(dataToStore));
+            console.log('🌸 اطلاعات قرار بهاری:', dataToStore);
+            
+            fullBloomConfetti(100);
+            submitBtn.disabled = true;
+            submitBtn.textContent = '💞 ثبت شد، در انتظار دیدارت هستم 💞';
+            submitBtn.style.opacity = '0.8';
+            
+            let note = document.createElement('div');
+            note.style.marginTop = '12px';
+            note.style.fontSize = '0.7rem';
+            note.style.background = '#2e2a1faa';
+            note.style.padding = '6px';
+            note.style.borderRadius = '30px';
+            note.style.color = '#ffecb3';
+            note.innerHTML = '🍃 اطلاعات قرار در مرورگر ذخیره شد. به امید دیدار در روز بهاری!';
+            finalDiv.parentNode.insertBefore(note, finalDiv.nextSibling);
+        });
+        
+        // ---------- افکت‌های شکوفه و کنفتی ----------
+        function startFallingSakura(count = 30) {
+            for(let i=0;i<count;i++) {
+                let petal = document.createElement('div');
+                petal.classList.add('sakura-falling');
+                petal.innerText = ['🌸','🌸','🍃','🌸','🌼','🌸','🌸','🍂'][Math.floor(Math.random()*8)];
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.fontSize = (18 + Math.random() * 24) + 'px';
+                petal.style.animationDuration = (5 + Math.random() * 7) + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(petal);
+                setTimeout(() => petal.remove(), 12000);
+            }
+            setInterval(() => {
+                if(document.body) {
+                    let newPetal = document.createElement('div');
+                    newPetal.classList.add('sakura-falling');
+                    newPetal.innerText = ['🌸','🌸','🍃','🌸','🌼','🌸'][Math.floor(Math.random()*6)];
+                    newPetal.style.left = Math.random() * 100 + '%';
+                    newPetal.style.fontSize = (15 + Math.random() * 22) + 'px';
+                    newPetal.style.animationDuration = (6 + Math.random() * 7) + 's';
+                    document.body.appendChild(newPetal);
+                    setTimeout(() => newPetal.remove(), 10000);
+                }
+            }, 1800);
+        }
+        
+        function vintageConfettiEffect(amount) {
+            for(let i=0;i<amount;i++) {
+                let arr = ['🌸','🎋','🍃','✨','🍡','🍊','🌼','🍉','🌸'];
+                let em = arr[Math.floor(Math.random()*arr.length)];
+                let div = document.createElement('div');
+                div.innerText = em;
+                div.style.position = 'fixed';
+                div.style.left = Math.random() * window.innerWidth + 'px';
+                div.style.top = '-20px';
+                div.style.fontSize = (18+Math.random()*26)+'px';
+                div.style.pointerEvents = 'none';
+                div.style.zIndex = '9999';
+                div.style.transition = 'top 1.2s linear, opacity 1s';
+                div.style.opacity = '0.9';
+                document.body.appendChild(div);
+                setTimeout(() => { div.style.top = window.innerHeight + 'px'; div.style.opacity = '0'; }, 20);
+                setTimeout(() => div.remove(), 1500);
+            }
+        }
+        
+        function fullBloomConfetti(qty) {
+            for(let i=0;i<qty;i++) {
+                let ems = ['🌸','🌸','🍃','🌸','🌼','🌺','🍒','🎋','🌸','🌸','🍂'];
+                let e = ems[Math.floor(Math.random()*ems.length)];
+                let el = document.createElement('div');
+                el.innerText = e;
+                el.style.position = 'fixed';
+                el.style.left = Math.random() * window.innerWidth + 'px';
+                el.style.top = '-30px';
+                el.style.fontSize = (20+Math.random()*34)+'px';
+                el.style.zIndex = '10000';
+                el.style.pointerEvents = 'none';
+                el.style.transition = 'top 1.4s ease-out, opacity 1.2s';
+                document.body.appendChild(el);
+                setTimeout(() => { el.style.top = window.innerHeight + 'px'; el.style.opacity = '0'; }, 15);
+                setTimeout(() => el.remove(), 2000);
+            }
+        }
+        
+        startFallingSakura(40);
+        
+        setTimeout(() => {
+            if(noBtn && pageInvite && !pageInvite.classList.contains('hidden')) {
+                escapeNoButtonGlobally();
+            }
+        }, 100);
+        
+        setInviteBackground();
+    })();
+</script>
+</body>
+</html>

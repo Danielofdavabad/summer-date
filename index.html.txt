@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>دعوت به قرار تابستونی | Hi Kimia</title>
+    <!-- فونت دستخط انگلیسی -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f9a826 0%, #fddb6a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* المان‌های تابستونی */
+        .sun {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 100px;
+            height: 100px;
+            background: #ffdf7e;
+            border-radius: 50%;
+            box-shadow: 0 0 50px #ffb347;
+            z-index: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 1000px;
+            opacity: 0.8;
+            z-index: 0;
+        }
+
+        .cloud1 { width: 120px; height: 70px; top: 80px; right: 20px; }
+        .cloud1:before, .cloud1:after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        .cloud1:before { width: 50px; height: 50px; top: -25px; left: 15px; }
+        .cloud1:after { width: 70px; height: 70px; top: -35px; left: 45px; }
+
+        .cloud2 { width: 180px; height: 90px; bottom: 100px; left: -50px; }
+        .cloud2:before, .cloud2:after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        .cloud2:before { width: 70px; height: 70px; top: -30px; left: 20px; }
+        .cloud2:after { width: 90px; height: 90px; top: -45px; left: 60px; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 60px 60px 80px 80px;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.2);
+            padding: 40px 30px 50px;
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,245,200,0.8);
+        }
+
+        /* استایل دستخط انگلیسی بنفش برای Hi Kimia */
+        .hi-kimia {
+            font-family: 'Dancing Script', 'Pacifico', cursive;
+            font-size: 3.2rem;
+            font-weight: bold;
+            color: #9b59b6;
+            text-shadow: 2px 2px 8px rgba(155, 89, 182, 0.3);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.4);
+            display: inline-block;
+            padding: 0 20px;
+            border-radius: 80px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #e67e22;
+            margin: 15px 0 10px;
+            text-shadow: 2px 2px 0 #ffe0a3;
+        }
+
+        .question {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: #fff0d4;
+            padding: 20px;
+            border-radius: 50px;
+            margin: 25px 0 35px;
+            color: #c0392b;
+            box-shadow: inset 0 -2px 0 #f0c0a0, 0 10px 15px -5px rgba(0,0,0,0.1);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 100px;
+        }
+
+        .btn {
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            font-family: inherit;
+        }
+
+        .btn-yes {
+            background-color: #2ecc71;
+            color: white;
+            text-shadow: 0 1px 1px green;
+        }
+        .btn-yes:hover {
+            background-color: #27ae60;
+            transform: scale(1.03);
+        }
+
+        .btn-no {
+            background-color: #e74c3c;
+            color: white;
+            text-shadow: 0 1px 1px #8b0000;
+            position: relative;
+            transition: all 0.1s ease;
+            z-index: 5;
+        }
+
+        .move-away {
+            transition: top 0.2s ease, left 0.2s ease, transform 0.15s ease;
+        }
+
+        /* پنل مرحله دوم */
+        .second-panel {
+            margin-top: 30px;
+            background: rgba(255, 250, 225, 0.95);
+            border-radius: 50px;
+            padding: 25px;
+            text-align: right;
+            display: none;
+            border: 2px solid #ffcc80;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+            animation: fadeSlideUp 0.5s ease;
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #b64926;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 40px;
+            border: 1px solid #ffb347;
+            background: #fffef7;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            border-color: #e67e22;
+            box-shadow: 0 0 0 3px rgba(230,126,34,0.2);
+        }
+
+        .date-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .date-row select {
+            flex: 1;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 8px;
+        }
+        .radio-group label {
+            font-weight: normal;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff3e0;
+            padding: 6px 15px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+        .radio-group input {
+            width: auto;
+            margin: 0;
+        }
+
+        .submit-plan {
+            background: #e67e22;
+            color: white;
+            font-size: 1.3rem;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .submit-plan:hover {
+            background: #d35400;
+            transform: scale(1.02);
+        }
+
+        .success-message {
+            margin-top: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px;
+            border-radius: 40px;
+            display: none;
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0.9); opacity: 0; }
+            80% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        footer {
+            margin-top: 25px;
+            font-size: 0.8rem;
+            color: #b85c1a;
+        }
+
+        .flower {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            font-size: 2rem;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        @media (max-width: 550px) {
+            .card { padding: 25px 20px; }
+            .hi-kimia { font-size: 2.4rem; }
+            h1 { font-size: 1.8rem; }
+            .question { font-size: 1.4rem; }
+            .btn { font-size: 1.4rem; padding: 8px 24px; }
+            .buttons { gap: 20px; }
+            .date-row select { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="sun"></div>
+<div class="cloud cloud1"></div>
+<div class="cloud cloud2"></div>
+<div class="flower">🌸🍉🌞🍦</div>
+
+<div class="card" id="mainCard">
+    <!-- عبارت Hi Kimia با دستخط بنفش -->
+    <div class="hi-kimia">✨ Hi Kimia ✨</div>
+    
+    <h1>🍧 یه پیشنهاد خنک 🍦</h1>
+    <div class="question" id="questionDiv">
+        با من میای سرِ قرار تابستونی؟
+    </div>
+    <div class="buttons" id="initialButtons">
+        <button class="btn btn-yes" id="yesBtn">🗸 بله، حتماً!</button>
+        <button class="btn btn-no" id="noBtn">✗ نه</button>
+    </div>
+    
+    <!-- پنل مرحله دوم (در ابتدا مخفی) -->
+    <div id="planPanel" class="second-panel">
+        <h3 style="color:#c0392b; margin-bottom:20px;">🌸 جزئیات قرار رو بگو 🌸</h3>
+        
+        <div class="form-group">
+            <label>📅 تاریخ قرار (شمسی):</label>
+            <div class="date-row">
+                <select id="yearSelect"></select>
+                <select id="monthSelect"></select>
+                <select id="daySelect"></select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>⏰ ساعت قرار:</label>
+            <input type="time" id="timeInput" value="19:00">
+        </div>
+        
+        <div class="form-group">
+            <label>🍽️ چه خوراکی دوست داری؟</label>
+            <div class="radio-group">
+                <label><input type="radio" name="meal" value="صبحانه"> صبحانه</label>
+                <label><input type="radio" name="meal" value="ناهار"> ناهار</label>
+                <label><input type="radio" name="meal" value="شام" checked> شام</label>
+                <label><input type="radio" name="meal" value="عصرونه"> عصرونه</label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>🌹 گل مورد علاقه‌ات (از بازار ایران):</label>
+            <select id="flowerSelect">
+                <option value="رز سرخ">🌹 رز سرخ</option>
+                <option value="لاله">🌷 لاله</option>
+                <option value="میخک">🌸 میخک</option>
+                <option value="نرگس">🌼 نرگس</option>
+                <option value="یاس">🤍 یاس</option>
+                <option value="مریم">🤍 مریم</option>
+                <option value="گل محمدی">🌹 گل محمدی</option>
+                <option value="سنبل">💜 سنبل</option>
+                <option value="زنبق">💙 زنبق</option>
+                <option value="آفتابگردان">🌻 آفتابگردان</option>
+            </select>
+        </div>
+        
+        <button id="submitPlanBtn" class="submit-plan">✨ ثبت قرار عاشقانه ✨</button>
+        <div id="finalSuccess" class="success-message"></div>
+    </div>
+    
+    <footer>🌊 آفتاب، دریا، خوشگذرونی... منتظرتم 🌊</footer>
+</div>
+
+<script>
+    (function() {
+        // ------------------- مرحله اول: فرار دکمه نه -------------------
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const initialButtons = document.getElementById('initialButtons');
+        const questionDiv = document.getElementById('questionDiv');
+        const planPanel = document.getElementById('planPanel');
+        
+        // توابع فرار
+        function moveNoButton() {
+            if (!noBtn) return;
+            const containerRect = initialButtons.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            const maxLeft = containerRect.width - btnRect.width - 10;
+            const maxTop = containerRect.height - btnRect.height - 10;
+            let newLeft = Math.random() * maxLeft;
+            let newTop = Math.random() * maxTop;
+            const yesBtnRect = yesBtn.getBoundingClientRect();
+            const relativeYesLeft = yesBtnRect.left - containerRect.left;
+            const relativeYesTop = yesBtnRect.top - containerRect.top;
+            const distance = Math.hypot(newLeft - relativeYesLeft, newTop - relativeYesTop);
+            if (distance < 80) {
+                newLeft = (newLeft + 70) % maxLeft;
+                newTop = (newTop + 50) % maxTop;
+            }
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = newLeft + 'px';
+            noBtn.style.top = newTop + 'px';
+            noBtn.style.margin = '0';
+            noBtn.classList.add('move-away');
+        }
+        
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+        noBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            moveNoButton();
+            noBtn.style.transform = 'rotate(2deg) scale(0.98)';
+            setTimeout(() => { noBtn.style.transform = ''; }, 150);
+        });
+        noBtn.addEventListener('focus', function() { noBtn.blur(); moveNoButton(); });
+        
+        // وقتی بله زده شد: مرحله دوم رو نشون بده
+        yesBtn.addEventListener('click', function() {
+            // مخفی کردن دکمه‌ها و سوال اصلی
+            initialButtons.style.display = 'none';
+            questionDiv.style.display = 'none';
+            // نمایش پنل برنامه‌ریزی
+            planPanel.style.display = 'block';
+            // ریختن مقادیر پیش‌فرض تاریخ شمسی
+            populateShamsiDates();
+            // یه افکت شاد کوچک
+            tinyConfetti();
+        });
+        
+        // ------------------- توابع تاریخ شمسی -------------------
+        function populateShamsiDates() {
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            const daySelect = document.getElementById('daySelect');
+            
+            const currentYear = 1404; // سال جاری شمسی تقریبی
+            for (let i = 1400; i <= 1406; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                if (i === currentYear) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+            for (let i = 1; i <= 12; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.textContent = i + ' - ' + getMonthName(i);
+                monthSelect.appendChild(option);
+            }
+            function updateDays() {
+                let year = parseInt(yearSelect.value);
+                let month = parseInt(monthSelect.value);
+                let daysInMonth = getShamsiDaysInMonth(year, month);
+                daySelect.innerHTML = '';
+                for (let i = 1; i <= daysInMonth; i++) {
+                    let opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = i;
+                    if (i === 10) opt.selected = true;
+                    daySelect.appendChild(opt);
+                }
+            }
+            function getMonthName(m) {
+                const names = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+                return names[m-1];
+            }
+            function getShamsiDaysInMonth(year, month) {
+                if (month <= 6) return 31;
+                if (month <= 11) return 30;
+                // اسفند: معمولاً 29 (کبیسه‌گیری ساده)
+                if (isLeapYearShamsi(year)) return 30;
+                else return 29;
+            }
+            function isLeapYearShamsi(year) {
+                return (year % 33 === 1 || year % 33 === 2 || year % 33 === 3 || year % 33 === 29);
+            }
+            yearSelect.addEventListener('change', updateDays);
+            monthSelect.addEventListener('change', updateDays);
+            updateDays();
+        }
+        
+        // ------------------- ثبت نهایی قرار -------------------
+        const submitBtn = document.getElementById('submitPlanBtn');
+        const finalSuccessDiv = document.getElementById('finalSuccess');
+        
+        submitBtn.addEventListener('click', function() {
+            const year = document.getElementById('yearSelect').value;
+            const month = document.getElementById('monthSelect').value;
+            const day = document.getElementById('daySelect').value;
+            const time = document.getElementById('timeInput').value;
+            const meal = document.querySelector('input[name="meal"]:checked').value;
+            const flower = document.getElementById('flowerSelect').options[document.getElementById('flowerSelect').selectedIndex].text;
+            
+            const shamsiDate = `${year}/${month}/${day}`;
+            const message = `💖 عالی شد! قرار ما در تاریخ ${shamsiDate} ساعت ${time}، همراه با ${meal} و گل ${flower} رزرو شد. منتظر تو هستم تا خاطره‌ای قشنگ بسازیم 💖`;
+            finalSuccessDiv.innerHTML = message;
+            finalSuccessDiv.style.display = 'block';
+            finalSuccessDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            fullConfetti();
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.6';
+            submitBtn.textContent = '❤️ قرار ثبت شد ❤️';
+        });
+        
+        // ------------------- افکت‌های شاد -------------------
+        function tinyConfetti() {
+            for(let i=0;i<40;i++) {
+                let emoji = ['🎉','✨','🍉','🌸','⭐','💖','🍦'][Math.floor(Math.random()*7)];
+                let div = document.createElement('div');
+                div.innerText = emoji;
+                div.style.position = 'fixed';
+                div.style.left = Math.random() * window.innerWidth + 'px';
+                div.style.top = '-20px';
+                div.style.fontSize = (15+Math.random()*25)+'px';
+                div.style.pointerEvents = 'none';
+                div.style.zIndex = '10000';
+                div.style.transition = 'top 1.2s ease-in, opacity 0.8s';
+                document.body.appendChild(div);
+                setTimeout(() => { div.style.top = window.innerHeight + 'px'; div.style.opacity = '0'; }, 10);
+                setTimeout(() => { div.remove(); }, 1500);
+            }
+        }
+        
+        function fullConfetti() {
+            for(let i=0;i<120;i++) {
+                let emoji = ['🎉','🌸','🌼','🍉','🍧','💝','✨','⭐','🌹','💐'][Math.floor(Math.random()*10)];
+                let div = document.createElement('div');
+                div.innerText = emoji;
+                div.style.position = 'fixed';
+                div.style.left = Math.random() * window.innerWidth + 'px';
+                div.style.top = '-30px';
+                div.style.fontSize = (18+Math.random()*35)+'px';
+                div.style.pointerEvents = 'none';
+                div.style.zIndex = '10001';
+                div.style.transition = 'top 1.8s ease-out, opacity 1.2s';
+                div.style.opacity = '0.9';
+                document.body.appendChild(div);
+                setTimeout(() => { div.style.top = window.innerHeight + 'px'; div.style.opacity = '0'; }, 20);
+                setTimeout(() => { div.remove(); }, 2200);
+            }
+        }
+        
+        // ریسایز برای دکمه نه
+        window.addEventListener('resize', function() {
+            if(noBtn && noBtn.style.position === 'absolute') {
+                const containerRect = initialButtons.getBoundingClientRect();
+                const btnRect = noBtn.getBoundingClientRect();
+                let leftVal = parseFloat(noBtn.style.left);
+                let topVal = parseFloat(noBtn.style.top);
+                if (isNaN(leftVal)) leftVal = 0;
+                if (isNaN(topVal)) topVal = 0;
+                const maxLeft = containerRect.width - btnRect.width - 10;
+                const maxTop = containerRect.height - btnRect.height - 10;
+                if(leftVal > maxLeft) noBtn.style.left = Math.max(0, maxLeft) + 'px';
+                if(topVal > maxTop) noBtn.style.top = Math.max(0, maxTop) + 'px';
+            }
+        });
+    })();
+</script>
+</body>
+</html>
